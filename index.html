@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movies</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <h1>Movies</h1>
+
+        <form class="form" id="form">
+            <input class="input-area" type="text" id="input-area" placeholder="Type a movie name...">
+        </form>
+    </header>
+
+    <main id="main">
+        <div class="cards-container">
+            <div class="cards" id="cards"></div>
+
+            <button class="button clear hidden" id="clear-button">Clear All</button>
+        </div>
+        <div class="right-bottom">
+            <p>❤️</p>
+            <img onclick="goToTMDb()" draggable="false" class="tmdb-logo"
+                src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_long_1-8ba2ac31f354005783fab473602c34c3f4fd207150182061e425d366e4f34596.svg">
+        </div>
+    </main>
+
+
+    <script src="project.js"></script>
+</body>
+
+</html>
