@@ -5,6 +5,7 @@ const form = document.getElementById("form")
 const search = document.getElementById("input-area")
 const cards = document.getElementById("cards")
 const clearButton = document.getElementById("clear-button")
+const cardsContainer = document.getElementById("cards-container")
 
 async function getMovies(url) {
     const res = await fetch(url)
@@ -43,20 +44,19 @@ function showMovies(movies) {
     movies.forEach((movie) => {
         const { title, poster_path, vote_average, overview, release_date, id } = movie
 
-        // const directorsName = await getCredits(CREDITS_URL);
-
         const card = document.createElement("div")
         card.classList.add("movie-card")
         card.innerHTML = `
             <div class= 'movie-image-container'>
                 <div id="image-placeholder" style='background: ${randomBackground};' class='movie-image not-found'>Movie Poster Does Not Exist</div>    
-                <img onerror="this.style.display='none'" src='${IMG_PATH + poster_path}' class="movie-image"'>
+                <a href="${IMG_PATH + poster_path}" target="_blank" id="preview-image">Full Size</a>
+                <img onerror="this.style.display='none'" src='${IMG_PATH + poster_path}' class="movie-image" id="movie-image"'>
             </div>
 
             <div class="about-movie">
                 <div class="name-director-imdb">
                     <div class="name-director">
-                        <h2>${title}<span>${release_date.substring(0, 4)}</span></h2>
+                        <h2>${title}<span id="movie-year">${release_date || "<span></span>"}</span></h2>
                         <div style="display: flex; flex-direction: row;" class="directors">
                             <h4 style="margin-right: 4px;">Directed by <h4 class="directors-name"></h4></h4>
                         </div>
@@ -78,7 +78,6 @@ function showMovies(movies) {
             </div>
         </div>
         `
-        const dName = card.querySelector(".directors-name")
 
         async function getCredits(url) {
             const res = await fetch(url)
@@ -100,6 +99,28 @@ function showMovies(movies) {
         cards.appendChild(card)
 
         clearButton.classList.remove("hidden")
+
+        const dName = card.querySelector(".directors-name")
+        const movieImage = card.querySelector("#movie-image")
+        const fullSizeButton = card.querySelector("#preview-image")
+        const movieYear = card.querySelector("#movie-year")
+
+        movieImage.addEventListener("mouseover", showFullSizeButton)
+        movieImage.addEventListener("mouseout", hideFullSizeButton)
+        fullSizeButton.addEventListener("mouseover", showFullSizeButton)
+        fullSizeButton.addEventListener("mouseout", hideFullSizeButton)
+
+        function showFullSizeButton() {
+            fullSizeButton.style.display = "block"
+        }
+
+        function hideFullSizeButton() {
+            fullSizeButton.style.display = "none"
+        }
+
+        if (release_date != undefined) {
+            movieYear.textContent = release_date.substring(0, 4)
+        }
     })
 }
 
@@ -132,5 +153,9 @@ search.addEventListener("keyup", (e) => {
             cards.firstElementChild.remove()
             clearButton.classList.add("hidden")
         }
+    }
+
+    while (cards.firstElementChild = null) {
+        console.log("lol")
     }
 })
