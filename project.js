@@ -1,161 +1,269 @@
-const IMG_PATH = 'https://image.tmdb.org/t/p/w1280'
-const SEARCH_API = 'https://api.themoviedb.org/4/search/movie?api_key=282f1ece5417d79b144a00c738e95a79&query="'
-
-const form = document.getElementById("form")
-const search = document.getElementById("input-area")
-const cards = document.getElementById("cards")
-const clearButton = document.getElementById("clear-button")
-const cardsContainer = document.getElementById("cards-container")
-
-async function getMovies(url) {
-    const res = await fetch(url)
-    const data = await res.json()
-
-    showMovies(data.results)
+*::-webkit-scrollbar {
+  border-radius: 100px;
+  height: 0;
+  width: 5px;
+}
+*::-webkit-scrollbar-thumb {
+  border-radius: 100px;
+  background-color: rgb(100, 100, 100);
+  z-index: 1;
+}
+*::-webkit-scrollbar-thumb:hover {
+  box-shadow: inset 0 0 6px rgb(75, 75, 75);
+}
+*::-webkit-scrollbar-thumb:active {
+  box-shadow: inset 0 0 6px rgb(50, 50, 50);
 }
 
-function goToTMDb() {
-    window.open("https://www.themoviedb.org/", "_blank")
+* {
+  scroll-behavior: smooth;
+  font-family: Rubik, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-const images = ["https://images.unsplash.com/photo-1612078340624-bd46c9bbeb71?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=341&q=80",
-    "https://images.unsplash.com/photo-1612107612209-1c8ac7ba78af?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80",
-    "https://images.unsplash.com/photo-1608501773255-d8cd9e5ba968?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=750&q=80",
-    "https://images.unsplash.com/photo-1607893407846-49905270209e?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=334&q=80",
-    "https://images.unsplash.com/photo-1607457661772-02cb7eb0511b?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=334&q=80",
-    "https://images.unsplash.com/photo-1609083517793-d173294303e7?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=334&q=80",
-    "https://images.unsplash.com/photo-1604263957485-ef9988a9827e?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80",
-    "https://images.unsplash.com/photo-1556139954-ec19cce61d61?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80",
-    "https://images.unsplash.com/photo-1555448248-2571daf6344b?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=334&q=80",
-    "https://images.unsplash.com/photo-1485724745104-ae0f55940bc1?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=714&q=80",
-    "https://images.unsplash.com/photo-1484589065579-248aad0d8b13?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=396&q=80",
-    "https://images.unsplash.com/photo-1541701494587-cb58502866ab?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80",
-    "https://images.unsplash.com/photo-1534312527009-56c7016453e6?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1yZWxhdGVkfDl8fHxlbnwwfHx8&auto=format&fit=crop&w=500&q=60",
-    "https://images.unsplash.com/photo-1503776768674-0e612f631345?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80",
-    "https://images.unsplash.com/photo-1515375380578-a0587184cedd?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=688&q=80",
-]
-
-const randomImageNumber = Math.floor(Math.random() * images.length)
-const randomBackground = 'url(' + images[randomImageNumber] + ')'
-
-function showMovies(movies) {
-    cards.innerHTML = ""
-
-    movies.forEach((movie) => {
-        const { title, poster_path, vote_average, overview, release_date, id } = movie
-
-        const card = document.createElement("div")
-        card.classList.add("movie-card")
-        card.innerHTML = `
-            <div class= 'movie-image-container'>
-                <div id="image-placeholder" style='background: ${randomBackground};' class='movie-image not-found'>Movie Poster Does Not Exist</div>    
-                <a href="${IMG_PATH + poster_path}" target="_blank" id="preview-image">Full Size</a>
-                <img onerror="this.style.display='none'" src='${IMG_PATH + poster_path}' class="movie-image" id="movie-image"'>
-            </div>
-
-            <div class="about-movie">
-                <div class="name-director-imdb">
-                    <div class="name-director">
-                        <h2>${title}<span id="movie-year">${release_date || "<span></span>"}</span></h2>
-                        <div style="display: flex; flex-direction: row;" class="directors">
-                            <h4 style="margin-right: 4px;">Directed by <h4 class="directors-name"></h4></h4>
-                        </div>
-                    </div>
-                    <div class="imdb">
-                        <h3>IMDb</h3>
-                        <p>${vote_average}</p>
-                    </div>
-            </div>
-
-            <div class="movie-details">
-                ${overview || "<i>There's no overview for this movie. It might be a good one, check out what is more about it!</i>"}
-            </div>
-
-            <a href="https://www.imdb.com/find?q=${title}&ref_=nv_sr_sm" target="_blank">More About</a>
-
-            <div class="delete-button">
-                <button class="button delete">Delete</button>
-            </div>
-        </div>
-        `
-
-        async function getCredits(url) {
-            const res = await fetch(url)
-            const data = await res.json()
-
-            const directors = [];
-            data.credits.crew.forEach(function (entry) {
-                if (entry.job === 'Director') {
-                    directors.push(entry.name);
-                }
-            })
-
-            dName.textContent = directors.join(", ")
-        }
-
-        const CREDITS_URL = `https://api.themoviedb.org/3/movie/${id}?api_key=282f1ece5417d79b144a00c738e95a79&append_to_response=credits`
-        getCredits(CREDITS_URL)
-
-        cards.appendChild(card)
-
-        clearButton.classList.remove("hidden")
-
-        const dName = card.querySelector(".directors-name")
-        const movieImage = card.querySelector("#movie-image")
-        const fullSizeButton = card.querySelector("#preview-image")
-        const movieYear = card.querySelector("#movie-year")
-
-        movieImage.addEventListener("mouseover", showFullSizeButton)
-        movieImage.addEventListener("mouseout", hideFullSizeButton)
-        fullSizeButton.addEventListener("mouseover", showFullSizeButton)
-        fullSizeButton.addEventListener("mouseout", hideFullSizeButton)
-
-        function showFullSizeButton() {
-            fullSizeButton.style.display = "block"
-        }
-
-        function hideFullSizeButton() {
-            fullSizeButton.style.display = "none"
-        }
-
-        if (release_date != undefined) {
-            movieYear.textContent = release_date.substring(0, 4)
-        }
-    })
+body {
+  background-color: rgb(12, 14, 15);
 }
 
-document.addEventListener("click", deleteMovie)
-
-function deleteMovie(e) {
-    if (e.target.classList.contains("delete")) {
-        e.target.parentElement.parentElement.parentElement.remove()
-        while (cards.childElementCount <= 0) {
-            clearButton.classList.add("hidden")
-            break
-        }
-    } else if (e.target.classList.contains("clear")) {
-        while (cards.firstElementChild != null) {
-            cards.firstElementChild.remove()
-            clearButton.classList.add("hidden")
-        }
-    }
+header {
+  color: white;
+  font-weight: 900;
+  font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
+  width: 50%;
+  position: relative;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 1rem;
 }
 
-search.addEventListener("keyup", (e) => {
-    e.preventDefault()
+input {
+  outline: none;
+  border-style: none;
+  border-radius: 5px;
+  padding: 1rem;
+  width: 15rem;
+  height: 1rem;
+  font-weight: 600;
+}
 
-    const searchTerm = search.value
+input:focus {
+  outline: none;
+}
 
-    if (searchTerm && searchTerm != "") {
-        getMovies(SEARCH_API + searchTerm)
-    } else if (searchTerm === "") {
-        while (cards.firstElementChild != null) {
-            cards.firstElementChild.remove()
-            clearButton.classList.add("hidden")
-        }
-    }
+input::placeholder {
+  color: rgb(153, 153, 153);
+}
 
-    while (cards.firstElementChild = null) {
-        console.log("lol")
-    }
-})
+#main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.button {
+  text-align: center;
+  width: 8rem;
+  height: 2rem;
+  z-index: 1;
+  color: white;
+  cursor: pointer;
+  outline: none;
+  border-style: none;
+  border-radius: 5px;
+  font-weight: 500;
+}
+.button:active {
+  transform: scale(0.98);
+}
+
+.delete {
+  background-color: rgb(20, 20, 20);
+}
+.delete:hover {
+  background-color: rgb(10, 10, 10);
+}
+.delete:active {
+  background-color: rgb(0, 0, 0);
+}
+
+.clear {
+  width: 2rem;
+  position: relative;
+  left: 24rem;
+  background-color: rgb(75, 75, 75);
+  color: #fff;
+  font-size: 50px;
+}
+.clear:hover {
+  background-color: rgb(70, 70, 70);
+}
+.clear:active {
+  background-color: rgb(65, 65, 65);
+}
+
+.cards-container {
+  overflow: scroll;
+  width: 50%;
+  height: 32rem;
+  position: relative;
+  top: 2rem;
+  padding: 1rem;
+  text-align: right;
+  border-radius: 5px;
+}
+
+.cards {
+  text-align: center;
+}
+
+.arrow-down {
+  color: rgb(210, 35, 35);
+}
+
+.movie-card {
+  margin: 2rem 0 2rem 0;
+  height: 17rem;
+  width: 100%;
+  background-color: white;
+  border-radius: 5px;
+  color: rgb(0, 0, 0);
+  padding: 1rem;
+  overflow: hidden;
+  display: flex;
+  box-shadow: 0 0 20px black;
+  text-align: left;
+}
+
+.about-movie {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: left;
+  width: 100%;
+}
+
+.movie-image-container {
+  position: relative;
+}
+
+.movie-image.not-found {
+  position: relative;
+  top: 0;
+  background: no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  color: #fff;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 1rem;
+}
+
+.movie-image {
+  position: relative;
+  top: -240px;
+  height: 240px;
+  max-width: 160px;
+  min-width: 160px;
+  border-radius: 5px;
+  margin-right: 1rem;
+}
+
+#preview-image {
+  position: absolute;
+  bottom: 10px;
+  left: 32px;
+  z-index: 10;
+  cursor: pointer;
+  background-color: black;
+  color: #fff;
+  padding: 4px;
+  width: 100px;
+  text-align: center;
+  border-radius: 5px;
+  transform: display 500ms ease;
+  font-size: 14px;
+  font-weight: 400;
+  display: none;
+}
+
+#preview-image:active {
+  transform: scale(0.98);
+}
+
+.name-director-imdb {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+span {
+  margin-left: 0.3rem;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.imdb {
+  text-align: right;
+  font-weight: 700;
+}
+
+h2 {
+  font-weight: 900;
+}
+
+h3 {
+  font-weight: 900;
+}
+
+.movie-details {
+  max-height: 50%;
+  margin-right: 3rem;
+  padding-right: 1rem;
+  overflow: scroll;
+}
+
+a {
+  width: 91px;
+  font-weight: 600;
+  color: rgb(210, 35, 35);
+  text-decoration: none;
+}
+a:hover {
+  color: rgb(185, 10, 10);
+}
+
+.right-bottom {
+  display: flex;
+  flex-direction: row;
+  position: fixed;
+  right: 15px;
+  bottom: 15px;
+  opacity: 1;
+}
+
+.right-bottom p {
+  color: #90cea1;
+  font-family: inherit;
+  font-weight: 100;
+  font-size: 15px;
+  margin-right: 5px;
+}
+
+.right-bottom .tmdb-logo {
+  width: 90px;
+  user-select: none;
+}
+
+.hidden {
+  display: none;
+}
