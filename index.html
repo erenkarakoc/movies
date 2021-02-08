@@ -10,6 +10,8 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
+    <link rel="icon"
+        href="https://www.flaticon.com/svg/vstatic/svg/777/777242.svg?token=exp=1612742571~hmac=adbb06200f91ff861f898aab8bc3b99b">
 </head>
 
 <body>
@@ -17,25 +19,27 @@
         <h1>Movies</h1>
 
         <form class="form" id="form">
-            <input class="input-area" type="text" id="input-area" placeholder="Type a movie name...">
+            <input autocomplete="off" class="input-area" type="search" id="input-area"
+                placeholder="Type a movie name...">
         </form>
     </header>
 
     <main id="main">
-        <div class="cards-container">
+        <div class="cards-container" id="cards-container">
             <div class="cards" id="cards"></div>
-
-            <button class="button clear hidden" id="clear-button">Clear All</button>
         </div>
+
+        <button class="button clear hidden" id="clear-button"><i class="fas fa-broom"></i></button>
+    </main>
+
+    <footer>
         <div class="right-bottom">
             <p>❤️</p>
             <img onclick="goToTMDb()" draggable="false" class="tmdb-logo"
                 src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_long_1-8ba2ac31f354005783fab473602c34c3f4fd207150182061e425d366e4f34596.svg">
         </div>
-    </main>
-
+    </footer>
 
     <script src="project.js"></script>
 </body>
-
 </html>
