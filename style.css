@@ -92,10 +92,12 @@ input::placeholder {
 }
 
 .clear {
+  width: 2rem;
   position: relative;
-  top: 2rem;
-
+  left: 24rem;
   background-color: rgb(75, 75, 75);
+  color: #fff;
+  font-size: 50px;
 }
 .clear:hover {
   background-color: rgb(70, 70, 70);
@@ -175,6 +177,28 @@ input::placeholder {
   margin-right: 1rem;
 }
 
+#preview-image {
+  position: absolute;
+  bottom: 10px;
+  left: 32px;
+  z-index: 10;
+  cursor: pointer;
+  background-color: black;
+  color: #fff;
+  padding: 4px;
+  width: 100px;
+  text-align: center;
+  border-radius: 5px;
+  transform: display 500ms ease;
+  font-size: 14px;
+  font-weight: 400;
+  display: none;
+}
+
+#preview-image:active {
+  transform: scale(0.98);
+}
+
 .name-director-imdb {
   display: flex;
   flex-direction: row;
@@ -187,13 +211,16 @@ span {
   font-size: 0.8rem;
   font-weight: 800;
 }
+
 .imdb {
   text-align: right;
   font-weight: 700;
 }
+
 h2 {
   font-weight: 900;
 }
+
 h3 {
   font-weight: 900;
 }
