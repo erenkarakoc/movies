@@ -97,7 +97,7 @@ input::placeholder {
   left: 24rem;
   background-color: rgb(75, 75, 75);
   color: #fff;
-  font-size: 50px;
+  font-size: 5px;
 }
 .clear:hover {
   background-color: rgb(70, 70, 70);
